@@ -6,7 +6,7 @@ if (isset($_POST['username'], $_POST['message'])) {
     if ($message->isValid()) {
         # code...
     } else {
-        $errors = 'Formulaire invalide';
+        $errors = $message->getErrors();
     }
     
 }
@@ -17,18 +17,24 @@ require 'elements/header.php';
 <div class="container">
     <h1>Livre d'or</h1>
 
-    <?php if($errors): ?>
+    <?php if(!empty($errors)): ?>
         <div class="alert alert-danger">
-            <?= $errors ?>
+            Formulaire invalide
         </div>
     <?php endif ?>
 
     <form action="" method="post">
         <div class="form-group">
-            <input type="text" name="username" id="" placeholder="Votre pseudo" class="form-control">
+            <input type="text" name="username" id="" placeholder="Votre pseudo" class="form-control" <?= isset($errors['username']) ? 'is-invalid' : '' ?>>
+            <?php if(isset($errors['username'])): ?>
+                <div class="invalid-feedback"><?= $errors['username'] ?></div>
+            <?php endif ?>
         </div>
         <div class="form-group">
-            <textarea name="message" id="" placeholder="Votre Message" class="form-control"></textarea>
+            <textarea name="message" id="" placeholder="Votre Message" class="form-control" <?= isset($errors['message']) ? 'is-invalid' : '' ?>></textarea>
+            <?php if(isset($errors['message'])): ?>
+                <div class="invalid-feedback"><?= $errors['message'] ?></div>
+            <?php endif ?>
         </div>
         <button class="btn btn-primary" type="submit">Envoyer</button>
     </form>
