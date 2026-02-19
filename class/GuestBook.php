@@ -28,10 +28,7 @@ class GuestBook {
         $lines = explode(PHP_EOL, $content);
         $messages = [];
         foreach ($lines as $line) {
-            $data = json_decode($line, true);
-            $date = new DateTime("@". $data['date']);
-            $date->setTimezone(new DateTimeZone('Africa/Kinshasa'));
-            $messages[]  = new Message($data['username'], $data['message'], $date);
+            $messages[] = Message::fromJSOn($line);
         }
         return array_reverse($messages);
     }
