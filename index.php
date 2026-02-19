@@ -1,6 +1,6 @@
 <?php
 require_once 'class/Message.php';
-require_once 'class/GuestBook';
+require_once 'class/GuestBook.php';
 $errors = null;
 if (isset($_POST['username'], $_POST['message'])) {
     $message = new Message($_POST['username'], $_POST['message']);
