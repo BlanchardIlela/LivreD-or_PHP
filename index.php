@@ -2,16 +2,20 @@
 require_once 'class/Message.php';
 require_once 'class/GuestBook.php';
 $errors = null;
+$success = false;
+$guestbook = new GuestBook(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'messages');
 if (isset($_POST['username'], $_POST['message'])) {
     $message = new Message($_POST['username'], $_POST['message']);
     if ($message->isValid()) {
-        $guestbook = new GuestBook(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'messages');
         $guestbook->addMessage($message);
+        $success = true;
+        $_POST = [];
     } else {
         $errors = $message->getErrors();
     }
     
 }
+$message = $guestbook->getMessages();
 $title = "Livre d'or";
 require 'elements/header.php';
 ?>
@@ -22,6 +26,12 @@ require 'elements/header.php';
     <?php if(!empty($errors)): ?>
         <div class="alert alert-danger">
             Formulaire invalide
+        </div>
+    <?php endif ?>
+
+    <?php if($success): ?>
+        <div class="alert alert-success">
+            Merci pour votre message
         </div>
     <?php endif ?>
 
@@ -40,6 +50,16 @@ require 'elements/header.php';
         </div>
         <button class="btn btn-primary" type="submit">Envoyer</button>
     </form>
+
+    <?php if(!empty($message)): ?>
+        <h1 class="mt-4">Vos messages</h1>
+
+        <?php foreach($message as $listmessage): ?>
+            <?= $listmessage->toHTML() ?>
+        <?php endforeach ?>
+
+    <?php endif ?>
+
 </div>
 
 <?php require 'elements/footer.php'; ?>
